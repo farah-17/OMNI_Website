@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuth() && request.auth.uid == userId;
+    }
+
+    // Users can read/write their own data
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      // Cart subcollection - fully open to owner
+      match /cart/{itemId} {
+        allow read, write, delete: if isOwner(userId);
+      }
+    }
+
+    // Orders - authenticated users can create, read their own
+    match /orders/{orderId} {
+      allow create: if isAuth();
+      allow read: if isAuth() && request.auth.uid == resource.data.userId;
+    }
+
+    // Contact form - anyone can submit
+    match /contact_submissions/{submissionId} {
+      allow create: if true;
+    }
+
+    // Test connection
+    match /test/connection {
+      allow read: if true;
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and settings",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "settings": {
+          "type": "object",
+          "properties": {
+            "notifications": { "type": "boolean" },
+            "theme": { "type": "string", "enum": ["light", "dark", "system"] }
+          }
+        }
+      },
+      "required": ["uid", "email"]
+    },
+    "CartItem": {
+      "title": "CartItem",
+      "description": "An item in the user's shopping cart",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "productId": { "type": "string" },
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "quantity": { "type": "integer" },
+        "chassis": { "type": "string" },
+        "keycap": { "type": "string" },
+        "addons": { "type": "array", "items": { "type": "string" } },
+        "image": { "type": "string" }
+      },
+      "required": ["productId", "name", "price", "quantity"]
+    },
+    "ContactSubmission": {
+      "title": "ContactSubmission",
+      "description": "A message submitted via the contact form",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "company": { "type": "string" },
+        "message": { "type": "string" },
+        "email": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "message", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile and settings"
+    },
+    "/users/{userId}/cart/{itemId}": {
+      "schema": "CartItem",
+      "description": "User's shopping cart items"
+    },
+    "/contact_submissions/{submissionId}": {
+      "schema": "ContactSubmission",
+      "description": "Messages from the contact form"
+    }
+  }
+}
