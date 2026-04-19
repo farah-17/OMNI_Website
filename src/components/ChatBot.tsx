@@ -25,10 +25,11 @@ async function getElephantResponse(messages: { role: string; content: string }[]
   try {
     const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${apiKey}`,
-        "HTTP-Referer": window.location.origin,
+        "HTTP-Referer": "omni-website-five.vercel.app",
         "X-Title": "OMNI Expert",
       },
       body: JSON.stringify({
@@ -44,7 +45,7 @@ async function getElephantResponse(messages: { role: string; content: string }[]
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      console.error("OpenRouter error:", err);
+      console.error("OpenRouter error status:", res.status, err);
       return "I'm having trouble connecting right now. Please try again.";
     }
 
