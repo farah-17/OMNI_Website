@@ -55,7 +55,7 @@ const HeroSection = () => {
       </div>
 
       {/* Main content */}
-      <div className="flex flex-col items-center flex-1 pt-28 pb-10">
+      <div className="flex flex-col items-center flex-1 pt-24 md:pt-28 pb-8 md:pb-10">
 
         {/* Text block */}
         <motion.div
@@ -91,7 +91,7 @@ const HeroSection = () => {
           </motion.p>
 
           {/* CTAs */}
-          <motion.div variants={fadeUp} className="flex gap-3 justify-center flex-wrap">
+          <motion.div variants={fadeUp} className="flex gap-3 justify-center flex-wrap w-full px-2">
             <Link to="/store">
               <button className="btn-glass-primary px-8 py-3.5 text-sm">Shop Now</button>
             </Link>
@@ -103,7 +103,7 @@ const HeroSection = () => {
 
         {/* Hero image — clickable, links to /store#configure */}
         <motion.div
-          className="relative z-10 mt-12 w-full max-w-3xl mx-auto"
+          className="relative z-10 mt-8 md:mt-12 w-full max-w-xs sm:max-w-lg md:max-w-3xl mx-auto"
           style={{ y: imageY, opacity: fade }}
           initial={{ opacity: 0, y: 60, scale: 0.93 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}

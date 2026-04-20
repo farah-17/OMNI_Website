@@ -234,7 +234,7 @@ const Store = () => {
             Introducing
           </motion.p>
           <motion.h1
-            className="text-6xl md:text-[8rem] font-heading font-bold tracking-wider text-gradient leading-none mb-6"
+            className="text-5xl sm:text-6xl md:text-[8rem] font-heading font-bold tracking-wider text-gradient leading-none mb-6"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
@@ -283,7 +283,7 @@ const Store = () => {
       </section>
 
       {/* ═══════ LOVE AT FIRST TOUCH ═══════ */}
-      <section className="relative py-24 md:py-40 px-6">
+      <section className="relative py-16 md:py-40 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <motion.h2
             className="text-4xl md:text-6xl font-heading font-bold text-foreground mb-8"
@@ -317,7 +317,7 @@ const Store = () => {
       </div>
 
       {/* ═══════ 3D CONFIGURATOR ═══════ */}
-      <section id="configure" className="relative py-24 md:py-40 px-6">
+      <section id="configure" className="relative py-16 md:py-40 px-6">
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
@@ -333,7 +333,7 @@ const Store = () => {
           </p>
         </motion.div>
 
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
           <motion.div
             className="glass rounded-3xl overflow-hidden aspect-square relative flex items-center justify-center p-8"
             initial={{ opacity: 0, x: -40 }}
@@ -378,7 +378,7 @@ const Store = () => {
                   <button
                     key={opt.id}
                     onClick={() => setChassis(opt)}
-                    className={`flex flex-col items-center gap-3 glass rounded-2xl p-5 transition-all min-w-[110px] ${
+                    className={`flex flex-col items-center gap-2 md:gap-3 glass rounded-xl md:rounded-2xl p-3 md:p-5 transition-all min-w-[80px] md:min-w-[110px] ${
                       chassis.id === opt.id ? "glow-blue border-primary/60 scale-105" : "hover:border-muted-foreground/30"
                     }`}
                   >
@@ -397,7 +397,7 @@ const Store = () => {
                   <button
                     key={opt.id}
                     onClick={() => setKeycap(opt)}
-                    className={`flex flex-col items-center gap-3 glass rounded-2xl p-5 transition-all min-w-[110px] ${
+                    className={`flex flex-col items-center gap-2 md:gap-3 glass rounded-xl md:rounded-2xl p-3 md:p-5 transition-all min-w-[80px] md:min-w-[110px] ${
                       keycap.id === opt.id ? "glow-blue border-primary/60 scale-105" : "hover:border-muted-foreground/30"
                     }`}
                   >

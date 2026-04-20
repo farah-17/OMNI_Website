@@ -68,7 +68,7 @@ const Contact = () => {
           </p>
         </motion.div>
 
-        <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12">
+        <div className="max-w-5xl mx-auto px-4 md:px-6 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           <motion.form
             onSubmit={handleSubmit}
             className="space-y-6"

@@ -19,42 +19,48 @@ OMNI Product Details:
 - Keycaps: Arctic White, Obsidian Black, Electric Blue, Dark Purple
 Tone: Professional, tech-forward, concise.`;
 
-async function getElephantResponse(messages: { role: string; content: string }[]): Promise<string> {
-  const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY || "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";
+const API_KEY = "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";
 
+async function getElephantResponse(messages: { role: string; content: string }[]): Promise<string> {
+  const apiKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_OPENROUTER_API_KEY) || API_KEY;
+
+  const body = JSON.stringify({
+    model: "openrouter/elephant-alpha",
+    messages: [
+      { role: "system", content: SYSTEM_PROMPT },
+      ...messages,
+    ],
+    max_tokens: 512,
+    temperature: 0.7,
+  });
+
+  // Try direct fetch first (works locally and most Vercel deployments)
   try {
     const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
-      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${apiKey}`,
-        "HTTP-Referer": "omni-website-five.vercel.app",
+        "HTTP-Referer": typeof window !== 'undefined' ? window.location.origin : "https://omni-website.vercel.app",
         "X-Title": "OMNI Expert",
       },
-      body: JSON.stringify({
-        model: "openrouter/elephant-alpha",
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          ...messages,
-        ],
-        max_tokens: 512,
-        temperature: 0.7,
-      }),
+      body,
     });
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      console.error("OpenRouter error status:", res.status, err);
-      return "I'm having trouble connecting right now. Please try again.";
+    if (res.ok) {
+      const data = await res.json();
+      const text = data?.choices?.[0]?.message?.content;
+      if (text) return text;
     }
 
-    const data = await res.json();
-    return data?.choices?.[0]?.message?.content || "I couldn't process that. Please try again.";
+    // If not ok, log and fall through to error
+    const err = await res.json().catch(() => ({}));
+    console.error("OpenRouter error:", res.status, JSON.stringify(err));
   } catch (err) {
-    console.error("ChatBot error:", err);
-    return "I'm having trouble connecting right now. Please try again.";
+    console.error("ChatBot fetch error:", err);
   }
+
+  return "I'm having trouble connecting right now. Please try again.";
 }
 
 const ChatBot: React.FC = () => {
@@ -76,25 +82,25 @@ const ChatBot: React.FC = () => {
     setInput('');
     setMessages(prev => [...prev, { role: 'user', text: userText }]);
     setIsLoading(true);
-
     const history = messages.map(m => ({ role: m.role, content: m.text }));
     history.push({ role: 'user', content: userText });
-
     const reply = await getElephantResponse(history);
     setMessages(prev => [...prev, { role: 'assistant', text: reply }]);
     setIsLoading(false);
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    /* On mobile: bottom-4 right-4, on desktop: bottom-6 right-6 */
+    <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50">
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 16, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            exit={{ opacity: 0, y: 16, scale: 0.95 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute bottom-20 right-0 w-[360px] h-[520px] glass rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-white/10"
+            /* Full width on small phones, fixed width on larger screens */
+            className="absolute bottom-20 right-0 w-[calc(100vw-2rem)] max-w-[360px] h-[75vh] max-h-[520px] glass rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-white/10"
           >
             {/* Header */}
             <div className="p-4 border-b border-white/10 flex items-center justify-between bg-primary/10 flex-shrink-0">
@@ -110,10 +116,7 @@ const ChatBot: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-2 hover:bg-white/5 rounded-full transition-colors"
-              >
+              <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/5 rounded-full transition-colors">
                 <X className="w-4 h-4 text-muted-foreground" />
               </button>
             </div>
@@ -122,14 +125,9 @@ const ChatBot: React.FC = () => {
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`flex gap-2 max-w-[82%] ${m.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                    <div className={`w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5 ${
-                      m.role === 'user' ? 'bg-white/10' : 'bg-primary/20'
-                    }`}>
-                      {m.role === 'user'
-                        ? <User className="w-3 h-3" />
-                        : <Bot className="w-3 h-3 text-primary" />
-                      }
+                  <div className={`flex gap-2 max-w-[85%] ${m.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <div className={`w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5 ${m.role === 'user' ? 'bg-white/10' : 'bg-primary/20'}`}>
+                      {m.role === 'user' ? <User className="w-3 h-3" /> : <Bot className="w-3 h-3 text-primary" />}
                     </div>
                     <div className={`p-3 rounded-2xl text-xs font-body leading-relaxed ${
                       m.role === 'user'
@@ -153,7 +151,7 @@ const ChatBot: React.FC = () => {
             </div>
 
             {/* Input */}
-            <div className="p-4 border-t border-white/10 bg-black/20 flex-shrink-0">
+            <div className="p-3 md:p-4 border-t border-white/10 bg-black/20 flex-shrink-0">
               <div className="relative">
                 <input
                   type="text"
@@ -181,20 +179,12 @@ const ChatBot: React.FC = () => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 ${
-          isOpen
-            ? 'bg-white/10 border border-white/10'
-            : 'bg-primary glow-blue'
-        }`}
+        className={`w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 ${isOpen ? 'bg-white/10 border border-white/10' : 'bg-primary glow-blue'}`}
       >
         <AnimatePresence mode="wait">
           {isOpen
-            ? <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                <X className="w-6 h-6" />
-              </motion.div>
-            : <motion.div key="msg" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                <MessageSquare className="w-6 h-6 text-primary-foreground" />
-              </motion.div>
+            ? <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}><X className="w-6 h-6" /></motion.div>
+            : <motion.div key="msg" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}><MessageSquare className="w-6 h-6 text-primary-foreground" /></motion.div>
           }
         </AnimatePresence>
       </motion.button>

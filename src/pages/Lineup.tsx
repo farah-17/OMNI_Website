@@ -70,7 +70,7 @@ const Lineup = () => {
           transition={{ duration: 0.8 }}
         >
           <p className="text-primary font-heading text-sm tracking-[0.3em] uppercase mb-4">The Lineup</p>
-          <h1 className="text-4xl md:text-6xl font-heading font-bold text-foreground mb-4">
+          <h1 className="text-3xl md:text-6xl font-heading font-bold text-foreground mb-4">
             Find Your <span className="text-gradient">OMNI</span>
           </h1>
           <p className="text-muted-foreground font-body max-w-lg mx-auto">
@@ -106,9 +106,9 @@ const Lineup = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -60 }}
               transition={{ duration: 0.5 }}
-              className={`glass rounded-3xl p-8 md:p-12 bg-gradient-to-br ${active.color}`}
+              className={`glass rounded-3xl p-6 md:p-12 bg-gradient-to-br ${active.color}`}
             >
-              <div className="grid md:grid-cols-2 gap-10 items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-center">
                 <div>
                   <div className={`w-14 h-14 rounded-2xl ${active.bgAccent} flex items-center justify-center mb-6`}>
                     <active.icon className={`w-7 h-7 ${active.accentClass}`} />

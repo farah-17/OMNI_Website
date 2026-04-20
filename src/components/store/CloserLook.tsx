@@ -27,9 +27,9 @@ const CloserLook = ({ items }: CloserLookProps) => {
 
   return (
     <section className="relative py-24 md:py-40 bg-black overflow-hidden">
-      <div className="px-6 md:px-12 mb-24 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="px-4 md:px-12 mb-12 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
         <motion.h2
-          className="text-5xl md:text-8xl font-heading font-bold text-white tracking-tighter"
+          className="text-3xl sm:text-5xl md:text-8xl font-heading font-bold text-white tracking-tighter"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -51,7 +51,7 @@ const CloserLook = ({ items }: CloserLookProps) => {
 
       <div
         ref={scrollRef}
-        className="flex flex-col gap-24 md:gap-40 px-6 md:px-12 max-w-7xl mx-auto"
+        className="flex flex-col gap-12 md:gap-40 px-4 md:px-12 max-w-7xl mx-auto"
       >
         {items.map((item, i) => (
           <motion.div
@@ -75,7 +75,7 @@ const CloserLook = ({ items }: CloserLookProps) => {
               {/* Sophisticated Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-1000" />
               
-              <div className="absolute inset-0 p-10 md:p-20 flex flex-col justify-end">
+              <div className="absolute inset-0 p-5 md:p-20 flex flex-col justify-end">
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -88,7 +88,7 @@ const CloserLook = ({ items }: CloserLookProps) => {
                   </p>
                 </motion.div>
                 
-                <h3 className="text-4xl md:text-7xl font-heading font-bold text-white mb-8 leading-[1.1] tracking-tight max-w-3xl">
+                <h3 className="text-2xl sm:text-4xl md:text-7xl font-heading font-bold text-white mb-4 md:mb-8 leading-[1.1] tracking-tight max-w-3xl">
                   {item.title}
                 </h3>
                 

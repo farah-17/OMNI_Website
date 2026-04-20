@@ -15,7 +15,7 @@ const specs = [
 
 const SpecsSection = () => {
   return (
-    <section className="relative py-24 md:py-40 px-6">
+    <section className="relative py-16 md:py-32 px-6">
       <div className="max-w-4xl mx-auto">
         <motion.div
           className="text-center mb-16"
@@ -40,7 +40,7 @@ const SpecsSection = () => {
           {specs.map((spec, i) => (
             <div
               key={spec.label}
-              className={`flex justify-between items-center px-8 py-5 ${
+              className={`flex justify-between items-center px-4 md:px-8 py-4 md:py-5 ${
                 i !== specs.length - 1 ? "border-b border-border/20" : ""
               }`}
             >

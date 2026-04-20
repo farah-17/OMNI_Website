@@ -36,10 +36,10 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section className="relative py-24 md:py-40 px-6">
+    <section className="relative py-16 md:py-32 px-6">
       <div className="max-w-6xl mx-auto">
         <motion.div
-          className="text-center mb-20"
+          className="text-center mb-12 md:mb-20"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

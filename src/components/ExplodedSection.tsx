@@ -3,8 +3,8 @@ import omniExploded from "@/assets/omni-exploded-nobg.png";
 
 const ExplodedSection = () => {
   return (
-    <section className="relative py-24 md:py-40 px-6 overflow-hidden">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+    <section className="relative py-16 md:py-32 px-6 overflow-hidden">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
