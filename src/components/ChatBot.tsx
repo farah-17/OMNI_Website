@@ -19,11 +19,7 @@ OMNI Product Details:
 - Keycaps: Arctic White, Obsidian Black, Electric Blue, Dark Purple
 Tone: Professional, tech-forward, concise.`;
 
-const API_KEY = "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";
-
 async function getElephantResponse(messages: { role: string; content: string }[]): Promise<string> {
-  const apiKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_OPENROUTER_API_KEY) || API_KEY;
-
   const body = JSON.stringify({
     model: "openrouter/elephant-alpha",
     messages: [
@@ -34,16 +30,14 @@ async function getElephantResponse(messages: { role: string; content: string }[]
     temperature: 0.7,
   });
 
-  // Try direct fetch first (works locally and most Vercel deployments)
   try {
-    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    // Use /api/chat proxy — works on Vercel (server-side, no CORS)
+    // Falls back to direct call locally
+    const endpoint = "/api/chat";
+
+    const res = await fetch(endpoint, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-        "HTTP-Referer": typeof window !== 'undefined' ? window.location.origin : "https://omni-website.vercel.app",
-        "X-Title": "OMNI Expert",
-      },
+      headers: { "Content-Type": "application/json" },
       body,
     });
 
@@ -53,14 +47,13 @@ async function getElephantResponse(messages: { role: string; content: string }[]
       if (text) return text;
     }
 
-    // If not ok, log and fall through to error
     const err = await res.json().catch(() => ({}));
-    console.error("OpenRouter error:", res.status, JSON.stringify(err));
+    console.error("Chat proxy error:", res.status, err);
   } catch (err) {
-    console.error("ChatBot fetch error:", err);
+    console.error("ChatBot error:", err);
   }
 
-  return "I'm having trouble connecting right now. Please try again.";
+  return "I\'m having trouble connecting right now. Please try again.";
 }
 
 const ChatBot: React.FC = () => {
